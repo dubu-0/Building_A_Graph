@@ -33,7 +33,7 @@ namespace BuildingAGraph
 			if (_rebuildIsNeeded) 
 				BuildGraph();
 		}
-
+		
 		private void BuildGraph()
 		{
 			if (_points.Count > 0) 
@@ -42,10 +42,11 @@ namespace BuildingAGraph
 			for (var i = 0; i < _pointNumber; i++)
 			{
 				var point = (Transform) PrefabUtility.InstantiatePrefab(_pointPrefab, transform);
-				var step = _graphScale * 2 / _pointNumber;
-				point.localScale = Vector3.one * step;
+				
+				var newLocalScale = point.localScale * _graphScale * 2 / _pointNumber;
+				point.localScale = newLocalScale;
 
-				var x = (i + 0.5f) * step - _graphScale;
+				var x = (i + 0.5f) * newLocalScale.x - _graphScale;
 				var y = _function?.Invoke(x) ?? x;
 
 				if (y is float.NaN)
