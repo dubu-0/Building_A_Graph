@@ -329,7 +329,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _pointPrefab: {fileID: 5294484708802359151, guid: 1804e7215680641429f0d5cf6e981c8b, type: 3}
-  _pointNumber: 50
+  _pointNumber: 500
 --- !u!4 &1882033138
 Transform:
   m_ObjectHideFlags: 0

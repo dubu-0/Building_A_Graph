@@ -1,5 +1,4 @@
-﻿using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace BuildingAGraph
 {
@@ -26,7 +25,7 @@ namespace BuildingAGraph
 			
 			for (var i = 0; i < _pointNumber; i++)
 			{
-				_points[i] = (Transform) PrefabUtility.InstantiatePrefab(_pointPrefab, transform);
+				_points[i] = Instantiate(_pointPrefab, transform);
 				var newLocalScale = _points[i].localScale * 2 / _pointNumber;
 				_points[i].localScale = newLocalScale;
 			}
