@@ -6,7 +6,7 @@ namespace BuildingAGraph
 	public class Graph : MonoBehaviour
 	{
 		[SerializeField] private Transform _pointPrefab;
-		[SerializeField, Range(1, 10000)] private int _pointNumber = 1;
+		[SerializeField, Range(1, 10000)] private int _resolution = 1;
 		[SerializeField] private FunctionName _function;
 		
 		private Transform[] _points;
@@ -23,13 +23,14 @@ namespace BuildingAGraph
 
 		private void BuildGraph()
 		{
-			_points = new Transform[_pointNumber];
-			
-			for (var i = 0; i < _pointNumber; i++)
+			var step = 2f / _resolution;
+			var scale = Vector3.one * step;
+			_points = new Transform[_resolution * _resolution];
+
+			for (var i = 0; i < _points.Length; i++)
 			{
-				_points[i] = Instantiate(_pointPrefab, transform);
-				var newLocalScale = _points[i].localScale * 2 / _pointNumber;
-				_points[i].localScale = newLocalScale;
+				var point = _points[i] = Instantiate(_pointPrefab, transform, false);
+				point.localScale = scale;
 			}
 		}
 		
@@ -37,14 +38,22 @@ namespace BuildingAGraph
 		{
 			var time = Time.time;
 
-			for (var i = 0; i < _pointNumber; i++)
+			for (int i = 0, x = 0, z = 0; i < _points.Length; i++, x++)
 			{
-				var point = _points[i];
+				if (x == _resolution)
+				{
+					x = 0;
+					z++;
+				}
 				
-				var x = (i + 0.5f) * point.localScale.x - 1;
-				var y = GetFunction(_function).Invoke(x, time);
+				var point = _points[i];
+				var pointPosition = point.localPosition;
+				
+				pointPosition.x = (x + 0.5f) * point.localScale.x - 1;
+				pointPosition.z = (z + 0.5f) * point.localScale.z - 1;
+				pointPosition.y = GetFunction(_function).Invoke(pointPosition.x, pointPosition.z, time);
 
-				_points[i].localPosition = new Vector3(x, y);
+				point.localPosition = pointPosition;
 			}
 		}
 	}

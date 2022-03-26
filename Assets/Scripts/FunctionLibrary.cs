@@ -6,7 +6,7 @@ namespace BuildingAGraph
 	{
 		private static readonly Function[] Functions = { Wave, MultiWave, Ripple };
 
-		public delegate float Function(float x, float t);
+		public delegate float Function(float x, float z, float t);
 
 		public enum FunctionName { Wave, MultiWave, Ripple }
 
@@ -15,20 +15,22 @@ namespace BuildingAGraph
 			return Functions[(int) functionName];
 		}
 		
-		public static float Wave(float x, float t)
+		public static float Wave(float x, float z, float t)
 		{
-			return Sin(PI * (x + t));
+			return Sin(PI * (x + z + t));
 		}
 		
-		public static float MultiWave(float x, float t)
+		public static float MultiWave(float x, float z, float t)
 		{
-			var y = Wave(x, 0.5f * t) + Wave(2 * x, 2 * t) / 2;
-			return y / 1.5f;
+			var y = Sin(PI * (x + 0.5f * t));
+			y += 0.5f * Sin(2f * PI * (z + t));
+			y += Sin(PI * (x + z + 0.25f * t));
+			return y * (1f / 2.5f);
 		}
 
-		public static float Ripple(float x, float t)
+		public static float Ripple(float x, float z, float t)
 		{
-			var d = Abs(x);
+			var d = Sqrt(x * x + z * z);
 			var y = Sin(PI * (4f * d - t));
 			return y / (1f + 10f * d);
 		}
