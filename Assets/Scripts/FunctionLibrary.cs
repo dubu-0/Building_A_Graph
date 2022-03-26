@@ -4,6 +4,17 @@ namespace BuildingAGraph
 {
 	public static class FunctionLibrary
 	{
+		private static readonly Function[] Functions = { Wave, MultiWave, Ripple };
+
+		public delegate float Function(float x, float t);
+
+		public enum FunctionName { Wave, MultiWave, Ripple }
+
+		public static Function GetFunction(FunctionName functionName)
+		{
+			return Functions[(int) functionName];
+		}
+		
 		public static float Wave(float x, float t)
 		{
 			return Sin(PI * (x + t));

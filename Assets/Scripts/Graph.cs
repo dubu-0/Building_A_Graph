@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using static BuildingAGraph.FunctionLibrary;
 
 namespace BuildingAGraph
 {
@@ -6,7 +7,7 @@ namespace BuildingAGraph
 	{
 		[SerializeField] private Transform _pointPrefab;
 		[SerializeField, Range(1, 10000)] private int _pointNumber = 1;
-		[SerializeField, Range(0, 2)] private int _function;
+		[SerializeField] private FunctionName _function;
 		
 		private Transform[] _points;
 
@@ -41,15 +42,7 @@ namespace BuildingAGraph
 				var point = _points[i];
 				
 				var x = (i + 0.5f) * point.localScale.x - 1;
-				float y;
-
-				if (_function == 0) 
-					y = FunctionLibrary.Wave(x, time);
-				else if (_function == 1)
-					y = FunctionLibrary.MultiWave(x, time);
-				else
-					y = FunctionLibrary.Ripple(x, time);
-
+				var y = GetFunction(_function).Invoke(x, time);
 
 				_points[i].localPosition = new Vector3(x, y);
 			}
