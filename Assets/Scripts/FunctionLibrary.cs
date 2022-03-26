@@ -1,4 +1,5 @@
-﻿using static UnityEngine.Mathf;
+﻿using UnityEngine;
+using static UnityEngine.Mathf;
 
 namespace BuildingAGraph
 {
@@ -6,7 +7,7 @@ namespace BuildingAGraph
 	{
 		private static readonly Function[] Functions = { Wave, MultiWave, Ripple };
 
-		public delegate float Function(float x, float z, float t);
+		public delegate Vector3 Function(float u, float v, float t);
 
 		public enum FunctionName { Wave, MultiWave, Ripple }
 
@@ -15,24 +16,36 @@ namespace BuildingAGraph
 			return Functions[(int) functionName];
 		}
 		
-		public static float Wave(float x, float z, float t)
+		public static Vector3 Wave(float u, float v, float t)
 		{
-			return Sin(PI * (x + z + t));
+			Vector3 point;
+			point.x = u;
+			point.y = Sin(PI * (u + v + t));
+			point.z = v;
+			
+			return point;
 		}
 		
-		public static float MultiWave(float x, float z, float t)
+		public static Vector3 MultiWave(float u, float v, float t)
 		{
-			var y = Sin(PI * (x + 0.5f * t));
-			y += 0.5f * Sin(2f * PI * (z + t));
-			y += Sin(PI * (x + z + 0.25f * t));
-			return y * (1f / 2.5f);
+			Vector3 point;
+			point.x = u;
+			point.y = (1f / 2.5f) * (Sin(PI * (u + 0.5f * t)) + 0.5f * Sin(2f * PI * (v + t)) + Sin(PI * (u + v + 0.25f * t)));
+			point.z = v;
+
+			return  point;
 		}
 
-		public static float Ripple(float x, float z, float t)
+		public static Vector3 Ripple(float u, float v, float t)
 		{
-			var d = Sqrt(x * x + z * z);
-			var y = Sin(PI * (4f * d - t));
-			return y / (1f + 10f * d);
+			var d = Sqrt(u * u + v * v);
+			
+			Vector3 point;
+			point.x = u;
+			point.y = Sin(PI * (4f * d - t)) / (1f + 10f * d);
+			point.z = v;
+			
+			return point;
 		}
 	}
 }

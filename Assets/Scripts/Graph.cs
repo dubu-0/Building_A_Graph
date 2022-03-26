@@ -37,6 +37,8 @@ namespace BuildingAGraph
 		private void AnimateGraph()
 		{
 			var time = Time.time;
+			var step = 2f / _resolution;
+			var v = 0.5f * step - 1;
 
 			for (int i = 0, x = 0, z = 0; i < _points.Length; i++, x++)
 			{
@@ -44,16 +46,11 @@ namespace BuildingAGraph
 				{
 					x = 0;
 					z++;
+					v = (z + 0.5f) * step - 1;
 				}
 				
-				var point = _points[i];
-				var pointPosition = point.localPosition;
-				
-				pointPosition.x = (x + 0.5f) * point.localScale.x - 1;
-				pointPosition.z = (z + 0.5f) * point.localScale.z - 1;
-				pointPosition.y = GetFunction(_function).Invoke(pointPosition.x, pointPosition.z, time);
-
-				point.localPosition = pointPosition;
+				var u = (x + 0.5f) * step - 1;
+				_points[i].localPosition = GetFunction(_function).Invoke(u, v, time);;
 			}
 		}
 	}
