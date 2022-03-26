@@ -40,7 +40,7 @@ namespace BuildingAGraph
 				var point = _points[i];
 				
 				var x = (i + 0.5f) * point.localScale.x - 1;
-				var y = Mathf.Sin(Mathf.PI * (x + time));
+				var y = FunctionLibrary.MultiWave(x, time);
 				
 				_points[i].localPosition = new Vector3(x, y);
 			}
