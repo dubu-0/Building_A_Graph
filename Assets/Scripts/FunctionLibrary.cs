@@ -16,6 +16,11 @@ namespace BuildingAGraph
 			return Functions[(int) functionName];
 		}
 		
+		public static FunctionName GetNextFunctionName(FunctionName functionName)
+		{
+			return (int) functionName + 1 < Functions.Length ? functionName + 1 : 0;
+		}
+		
 		public static Vector3 Wave(float u, float v, float t)
 		{
 			Vector3 point;

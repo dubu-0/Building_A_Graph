@@ -8,8 +8,10 @@ namespace BuildingAGraph
 		[SerializeField] private Transform _pointPrefab;
 		[SerializeField, Range(1, 10000)] private int _resolution = 1;
 		[SerializeField] private FunctionName _function;
+		[SerializeField, Range(0f, 10f)] private float _functionDuration = 1f;
 		
 		private Transform[] _points;
+		private float _currentDuration;
 
 		private void Awake()
 		{
@@ -18,6 +20,7 @@ namespace BuildingAGraph
 
 		private void Update()
 		{
+			SwitchFunction();
 			AnimateGraph();
 		}
 
@@ -33,7 +36,18 @@ namespace BuildingAGraph
 				point.localScale = scale;
 			}
 		}
-		
+
+		private void SwitchFunction()
+		{
+			_currentDuration += Time.deltaTime;
+
+			if (_currentDuration >= _functionDuration)
+			{
+				_currentDuration -= _functionDuration;
+				_function = GetNextFunctionName(_function);
+			}
+		}
+
 		private void AnimateGraph()
 		{
 			var time = Time.time;
@@ -50,7 +64,8 @@ namespace BuildingAGraph
 				}
 				
 				var u = (x + 0.5f) * step - 1;
-				_points[i].localPosition = GetFunction(_function).Invoke(u, v, time);;
+
+				_points[i].localPosition = GetFunction(_function).Invoke(u, v, time);
 			}
 		}
 	}
