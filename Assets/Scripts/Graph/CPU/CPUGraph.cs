@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
-using static BuildingAGraph.FunctionLibrary;
+using static BuildingAGraph.Graph.CPU.FunctionLibrary;
 
-namespace BuildingAGraph
+namespace BuildingAGraph.Graph.CPU
 {
-	public class Graph : MonoBehaviour
+	public class CPUGraph : MonoBehaviour
 	{
 		[SerializeField] private Transform _pointPrefab;
-		[SerializeField, Range(1, 10000)] private int _resolution = 1;
+		[SerializeField, Range(1, 200)] private int _resolution = 1;
 		[SerializeField] private FunctionName _function;
 		[SerializeField, Range(0f, 10f)] private float _functionDuration = 1f;
 		[SerializeField, Range(0f, 10f)] private float _transitionDuration = 1f;

@@ -1,4 +1,4 @@
-Shader "Graph/Point Surface"
+Shader "Graph/Point BRP CPU"
 {
     Properties
     {
@@ -15,8 +15,6 @@ Shader "Graph/Point Surface"
         
         struct Input
         {
-            // you can't name it "worldPosition", coz worldPos is a special name
-            // worldPos is a world position of gameObject with material of this shader 
             float3 worldPos;
         };
 

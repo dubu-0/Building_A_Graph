@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using static UnityEngine.Mathf;
 
-namespace BuildingAGraph
+namespace BuildingAGraph.Graph.CPU
 {
 	public static class FunctionLibrary
 	{
