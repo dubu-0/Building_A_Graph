@@ -791,6 +791,7 @@ MonoBehaviour:
   _resolution: 100
   _function: 0
   _functionDuration: 1
+  _transitionDuration: 1
   _transitionMode: 1
 --- !u!4 &1882033138
 Transform:

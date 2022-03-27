@@ -9,10 +9,13 @@ namespace BuildingAGraph
 		[SerializeField, Range(1, 10000)] private int _resolution = 1;
 		[SerializeField] private FunctionName _function;
 		[SerializeField, Range(0f, 10f)] private float _functionDuration = 1f;
+		[SerializeField, Range(0f, 10f)] private float _transitionDuration = 1f;
 		[SerializeField] private TransitionMode _transitionMode;
 		
 		private Transform[] _points;
 		private float _currentDuration;
+		private FunctionName _transitionFunction;
+		private bool _transitioning;
 		
 		private enum TransitionMode { Cycle, Random }
 
@@ -23,8 +26,23 @@ namespace BuildingAGraph
 
 		private void Update()
 		{
-			SwitchFunction();
-			AnimateGraph();
+			_currentDuration += Time.deltaTime;
+
+			if (_transitioning && _currentDuration >= _transitionDuration)
+			{
+				_currentDuration -= _transitionDuration;
+				_transitioning = false;
+			}
+			else if (_currentDuration >= _functionDuration)
+			{
+				_currentDuration -= _functionDuration;
+				SwitchFunction();
+			}
+
+			if (_transitioning)
+				UpdateFunctionTransition();
+			else
+				UpdateFunction();
 		}
 
 		private void BuildGraph()
@@ -42,13 +60,9 @@ namespace BuildingAGraph
 
 		private void SwitchFunction()
 		{
-			_currentDuration += Time.deltaTime;
-			
-			if (_currentDuration >= _functionDuration)
-			{
-				_currentDuration -= _functionDuration;
-				_function = PickNextFunction();
-			}
+			_transitioning = true;
+			_transitionFunction = _function;
+			_function = PickNextFunction();
 		}
 
 		private FunctionName PickNextFunction()
@@ -58,7 +72,32 @@ namespace BuildingAGraph
 				GetRandomFunctionNameOtherThan(_function);
 		}
 
-		private void AnimateGraph()
+		private void UpdateFunctionTransition()
+		{
+			var from = GetFunction(_transitionFunction);
+			var to = GetFunction(_function);
+			var progress = _currentDuration / _transitionDuration;
+			
+			var time = Time.time;
+			var step = 2f / _resolution;
+			var v = 0.5f * step - 1;
+
+			for (int i = 0, x = 0, z = 0; i < _points.Length; i++, x++)
+			{
+				if (x == _resolution)
+				{
+					x = 0;
+					z++;
+					v = (z + 0.5f) * step - 1;
+				}
+				
+				var u = (x + 0.5f) * step - 1;
+
+				_points[i].localPosition = Morph(u, v, time, from, to, progress);
+			}
+		}
+
+		private void UpdateFunction()
 		{
 			var time = Time.time;
 			var step = 2f / _resolution;

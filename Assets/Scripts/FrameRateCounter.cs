@@ -16,8 +16,8 @@ namespace BuildingAGraph
 		private float _totalDuration;
 		private float _worstDuration = float.MinValue;
 		private int _frameCount;
-		
-		public enum DisplayMode { FPS, MS }
+
+		private enum DisplayMode { FPS, MS }
 		
 		private void Update()
 		{
