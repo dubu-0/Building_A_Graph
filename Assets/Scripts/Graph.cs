@@ -9,9 +9,12 @@ namespace BuildingAGraph
 		[SerializeField, Range(1, 10000)] private int _resolution = 1;
 		[SerializeField] private FunctionName _function;
 		[SerializeField, Range(0f, 10f)] private float _functionDuration = 1f;
+		[SerializeField] private TransitionMode _transitionMode;
 		
 		private Transform[] _points;
 		private float _currentDuration;
+		
+		private enum TransitionMode { Cycle, Random }
 
 		private void Awake()
 		{
@@ -40,12 +43,19 @@ namespace BuildingAGraph
 		private void SwitchFunction()
 		{
 			_currentDuration += Time.deltaTime;
-
+			
 			if (_currentDuration >= _functionDuration)
 			{
 				_currentDuration -= _functionDuration;
-				_function = GetNextFunctionName(_function);
+				_function = PickNextFunction();
 			}
+		}
+
+		private FunctionName PickNextFunction()
+		{
+			return _transitionMode == TransitionMode.Cycle ?
+				GetNextFunctionName(_function) :
+				GetRandomFunctionNameOtherThan(_function);
 		}
 
 		private void AnimateGraph()

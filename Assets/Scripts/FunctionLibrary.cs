@@ -20,6 +20,12 @@ namespace BuildingAGraph
 		{
 			return (int) functionName + 1 < Functions.Length ? functionName + 1 : 0;
 		}
+
+		public static FunctionName GetRandomFunctionNameOtherThan(FunctionName functionName)
+		{
+			var choice = (FunctionName) Random.Range(1, Functions.Length);
+			return choice == functionName ? 0 : choice;
+		}
 		
 		public static Vector3 Wave(float u, float v, float t)
 		{
