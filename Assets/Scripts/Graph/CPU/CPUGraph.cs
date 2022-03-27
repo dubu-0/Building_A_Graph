@@ -6,7 +6,7 @@ namespace BuildingAGraph.Graph.CPU
 	public class CPUGraph : MonoBehaviour
 	{
 		[SerializeField] private Transform _pointPrefab;
-		[SerializeField, Range(10, 200)] private int _resolution = 10;
+		[SerializeField, Range(10, 175)] private int _resolution = 10;
 		[SerializeField] private FunctionName _function;
 		[SerializeField, Range(0f, 10f)] private float _functionDuration = 1f;
 		[SerializeField, Range(0f, 10f)] private float _transitionDuration = 1f;

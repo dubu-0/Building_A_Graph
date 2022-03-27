@@ -5,7 +5,7 @@ namespace BuildingAGraph.Graph.GPU
 {
 	public class GPUGraph : MonoBehaviour
 	{
-		private const int MaxResolution = 3000;
+		private const int MaxResolution = 1500;
 		private const int FloatSize = 4;
 		private const int Vector3Size = 3 * FloatSize;
 		
@@ -13,6 +13,7 @@ namespace BuildingAGraph.Graph.GPU
 		private static readonly int ResolutionID = Shader.PropertyToID("_Resolution");
 		private static readonly int StepID = Shader.PropertyToID("_Step");
 		private static readonly int TimeID = Shader.PropertyToID("_Time");
+		private static readonly int TransitionProgressID = Shader.PropertyToID("_TransitionProgress");
 
 		[SerializeField] private ComputeShader _computeShader;
 		[SerializeField] private Material _material;
@@ -66,8 +67,17 @@ namespace BuildingAGraph.Graph.GPU
 			_computeShader.SetInt(ResolutionID, _resolution);
 			_computeShader.SetFloat(StepID, step);
 			_computeShader.SetFloat(TimeID, Time.time);
+			
+			if (_transitioning) 
+			{
+				_computeShader.SetFloat(TransitionProgressID, 
+					Mathf.SmoothStep(0f, 1f, _currentDuration / _transitionDuration));
+			}
 
-			var kernelIndex = (int) _function;
+			var kernelIndex = (int) _function + (int) (_transitioning ? 
+				_transitionFunction :
+				_function) * GetFunctionCount();
+			
 			_computeShader.SetBuffer(kernelIndex, PositionsID, _positionsBuffer);
 
 			var groups = Mathf.CeilToInt(_resolution / 8f);

@@ -27,6 +27,11 @@ namespace BuildingAGraph.Graph.CPU
 			return choice == functionName ? 0 : choice;
 		}
 
+		public static int GetFunctionCount()
+		{
+			return Functions.Length;
+		}
+
 		public static Vector3 Morph(float u, float v, float t, Function from, Function to, float progress)
 		{
 			return Vector3.LerpUnclamped(
@@ -69,7 +74,7 @@ namespace BuildingAGraph.Graph.CPU
 
 		public static Vector3 Sphere(float u, float v, float t)
 		{
-			var r = 0.9f + 0.1f * Sin(PI * (6f * u + 4f * v + t)); 
+			var r = 0.9f + 0.1f * Sin(PI * (12f * u + 8f * v + t)); 
 			var s = r * Cos(0.5f * PI * v);
 			
 			Vector3 point;
@@ -82,8 +87,8 @@ namespace BuildingAGraph.Graph.CPU
 		
 		public static Vector3 Torus(float u, float v, float t)
 		{
-			var r1 = 0.7f + 0.1f * Sin(PI * (6f * u + 0.5f * t));
-			var r2 = 0.15f + 0.05f * Sin(PI * (8f * u + 4f * v + 2f * t));
+			var r1 = 0.7f + 0.1f * Sin(PI * (8f * u + 0.5f * t));
+			var r2 = 0.15f + 0.05f * Sin(PI * (16f * u + 8f * v + 3f * t));
 			var s = r1 + r2 * Cos(PI * v);
 			
 			Vector3 point;
